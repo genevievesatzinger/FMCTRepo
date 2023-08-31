@@ -1,0 +1,66 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div>
+
+        {% include "searchForm.html" %}
+
+        <div class="shadow p-5 mt-5 mb-5 bg-white rounded" id="resultsTable" style="overflow: auto;">
+            <div class="d-flex justify-content-center">
+                <button id="tableView" class="btn btn-primary  mx-1">Table View</button>
+                <button id="cardView" class="btn btn-primary">Card View</button>
+            </div>
+            
+            <table class="table">
+                <thead>
+                    <tr>
+                        {% for Field in FieldList.Field %}
+                        <th>
+                            {{Field}}
+                        </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for StudyField in StudyFieldsList.StudyFields %}
+                        <tr>
+                            {% for Field in StudyField %}
+                            <td>
+                                {{Field.FieldValue}}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                </tbody>
+            </table>
+            
+            <div class="d-flex justify-content-center">
+                {% if pre_rank %}
+                <form id="hiddenForm" method="POST" action="{% url 'results' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="search_query" value="{{search_query}}">
+                    <input type="hidden" name="result_rnk" value="{{pre_rank}}">
+                    <button id="preButton" class="btn btn-primary  mx-1">Previous</button>
+                </form>
+                {% endif %}
+                
+                {% if next_rank %}
+                <form id="hiddenForm" method="POST" action="{% url 'results' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="search_query" value="{{search_query}}">
+                    <input type="hidden" name="result_rnk" value="{{next_rank}}">
+                    <button id="nextButton" class="btn btn-primary">Next</button>
+                </form>
+                {% endif %}
+            </div>
+            
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}
